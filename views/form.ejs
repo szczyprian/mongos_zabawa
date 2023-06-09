@@ -1,25 +1,27 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
+<%- include('partials/header') %>
 
+<%- include('partials/navbar') %>
+
+<div class="container" style="margin-top: 5%; background-color: lightcyan;">
     <form action="/product" method="POST">
-        <label for="name">Name of product</label>
-        <input type="text" name="name" id="name">
-        <br>
-        <label for="price">Price of product</label>
-        <input type="number" name="price" id="price">
-        <br>
-        <label for="qty">Qty of product</label>
-        <input type="number" name="qty" id="qty">
-        <br>
-        <button>Submit</button>
+        <div class="mb-3">
+            <label for="name" class="form-label">Nazwa Produktu</label>
+            <input type="text" class="form-control" id="name" name="name">
+        </div>
+
+        <div class="mb-3">
+            <label for="price" class="form-label">Cena produktu</label>
+            <input type="number" class="form-control" id="price" name="price">
+        </div>
+
+        <div class="mb-3">
+                <label for="qty" class="form-label">Ilość produktu</label>
+                <input type="number" class="form-control" id="qty" name="qty">
+        </div>
+
+          <button type="submit" class="btn btn-primary">Dodaj</button>
     </form>
+</div>
 
 </body>
 </html>

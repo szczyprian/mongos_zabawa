@@ -1,24 +1,24 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
+<%- include('partials/header') %>
+
+<%- include('partials/navbar') %>
+
+
+<div class="container" style="background-color: lightcyan;">
+
     <h1>Produty</h1>
 
 
     <% for( p of products){ %>
-            <div>
+            <div class="card" style="margin-top: 20px; background-color: #b5ffc5;">
 
                 <h2><%= p.name %></h2>
-                <p>price: <%= p.price %> , Qty:<%= p.qty %></p>
+                <p>Cenna: <%= p.price %> zł <% if( p.qty > 0) {%> dostępny <% }else{ %>  niedostępny <% } %></p>
+                <button class="btn btn-secondary "> Kup</button>
 
             </div>
 
 
     <% } %> 
+</div>
 </body>
 </html>

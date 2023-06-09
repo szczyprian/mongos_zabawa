@@ -45,7 +45,7 @@ app.get('/product',(req,res)=>{
   
     
     Product.find({}).then( products =>{
-        console.log(products);
+        //console.log(products);
         res.render('product',{products});
     });
     
