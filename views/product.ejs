@@ -12,8 +12,11 @@
             <div class="card" style="margin-top: 20px; background-color: #b5ffc5;">
 
                 <h2><%= p.name %></h2>
-                <p>Cenna: <%= p.price %> zł <% if( p.qty > 0) {%> dostępny <% }else{ %>  niedostępny <% } %></p>
-                <button class="btn btn-secondary "> Kup</button>
+                <p >Cenna: <%= p.price %> zł <% if( p.qty > 0) {%> dostępny <% }else{ %> <span style="color: red;"> niedostępny </span>  <% } %></p>
+                
+                <form action="/product/<%= p._id %>/buy?_method=PATCH" method="POST">
+                    <button class="btn btn-secondary " <%= p.qty > 0 ? '' : 'disabled' %>> Kup</button>
+                </form>
 
             </div>
 
