@@ -1,0 +1,31 @@
+<%- include('partials/header') %>
+
+<%- include('partials/navbar') %>
+
+
+<div class="container" style="background-color: lightcyan;">
+
+    <h1>Produty</h1>
+
+
+    <% for( p of products){ %>
+            <div class="card" style="margin-top: 20px; background-color: #b5ffc5;">
+
+                <h2><%= p.name %></h2>
+                <p >Cenna: <%= p.price %> zł <% if( p.qty > 0) {%> dostępny <% }else{ %> <span style="color: red;"> niedostępny </span>  <% } %></p>
+                <p>Qty: <%= p.qty %></p>
+                <div>
+                    <button class="btn btn-secondary"><a style="color:white;text-decoration: none;" href="/product/<%= p._id %>/edit">Edit</a></button>
+                  <form style="display: inline;" action="/product/<%= p._id %>?_method=DELETE" method="POST"> <button class="btn btn-danger">Delete</button> </form> 
+                </div>
+                
+
+            </div>
+
+
+    <% } %> 
+    <br>
+    <button class="btn btn-primary"><a style="color:white;text-decoration: none;" href="/product/add">Add Product</a></button>
+</div>
+</body>
+</html>

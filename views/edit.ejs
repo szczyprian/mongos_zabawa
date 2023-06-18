@@ -1,0 +1,27 @@
+<%- include('partials/header') %>
+
+<%- include('partials/navbar') %>
+
+<div class="container" style="margin-top: 5%; background-color: lightcyan;">
+    <form action="/product/<%= product._id %>?_method=PUT" method="POST">
+        <div class="mb-3">
+            <label for="name" class="form-label">Nazwa Produktu</label>
+            <input type="text" class="form-control" id="name" name="name"  value= "<%= product.name %>">
+        </div>
+
+        <div class="mb-3">
+            <label for="price" class="form-label">Cena produktu</label>
+            <input type="number" class="form-control" id="price" name="price" value="<%= product.price %>">
+        </div>
+
+        <div class="mb-3">
+                <label for="qty" class="form-label">Ilość produktu</label>
+                <input type="number" class="form-control" id="qty" name="qty" value="<%= product.qty %>">
+        </div>
+
+          <button type="submit" class="btn btn-primary">Edit Product</button>
+    </form>
+</div>
+
+</body>
+</html>

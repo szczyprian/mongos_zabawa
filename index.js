@@ -33,20 +33,18 @@ app.get('/',(req,res)=>{
     res.render('home');
 });
 
-app.get('/product',(req,res)=>{
+app.get('/product', async (req,res)=>{
   
     
-    Product.find({}).then( products =>{
+    const products = await Product.find({});
         //console.log(products);
-        res.render('product',{products});
-    });
+        
     
+    res.render('product',{products});
 });
 
 
-app.get('/product/add',(req,res)=>{
-    res.render('form');
-});
+
 
 app.post('/product',(req,res)=>{
     const {name,price,qty} = req.body;
@@ -55,6 +53,34 @@ app.post('/product',(req,res)=>{
     res.redirect('/product');
 
 });
+
+app.get('/product/add',(req,res)=>{
+    res.render('form');
+});
+
+app.get('/product/admin', async (req,res)=>{
+    const products = await Product.find({});
+    res.render('admin',{products});
+})
+
+
+app.get('/product/:id/edit', async (req,res)=>{
+    const {id} = req.params;
+    const product = await Product.findById(id);
+
+    res.render('edit',{product})
+})
+
+app.put('/product/:id',async(req,res)=>{
+    const {id} = req.params;
+    const updatedProduct = await Product.findByIdAndUpdate(id,req.body,{runValidators:true, new:true});
+    res.redirect("/product/admin");
+})
+app.delete('/product/:id',async(req,res)=>{
+    const {id} = req.params;
+    const deletedProduct = await Product.findByIdAndDelete(id);
+    res.redirect('/product/admin')
+})
 
 app.patch('/product/:id/buy', async (req,res)=>{
     const {id} = req.params;
