@@ -3,6 +3,7 @@ const app = express();
 const path = require('path');
 const ejsMate = require('ejs-mate');
 const methodOverride = require('method-override');
+const AppError = require('./AppError');
 const mongoose = require('mongoose');
 
 const Product = require('./models/product');
@@ -30,11 +31,18 @@ app.set('view engine', 'ejs');
 app.set('views',path.join(__dirname,'/views'));
 
 
+function wrapAsync(fn){
+    return function(req,res,next){
+        fn(req,res,next).catch(e => next(e));
+    }
+}
+
+
 app.get('/',(req,res)=>{
     res.render('home');
 });
 
-app.get('/product', async (req,res)=>{
+app.get('/product', wrapAsync( async (req,res,next)=>{
   
     
     const products = await Product.find({});
@@ -42,48 +50,51 @@ app.get('/product', async (req,res)=>{
         
     
     res.render('product',{products});
-});
+}));
 
 
 
 
-app.post('/product',(req,res)=>{
+app.post('/product',wrapAsync(async (req,res,next)=>{
     const {name,price,qty} = req.body;
     const newProduct = new Product({name:name,price:price,qty:qty});
-    newProduct.save();
+    await newProduct.save();
     res.redirect('/product');
 
-});
+}));
 
 app.get('/product/add',(req,res)=>{
     res.render('form');
 });
 
-app.get('/product/admin', async (req,res)=>{
+app.get('/product/admin', wrapAsync(async (req,res,next)=>{
     const products = await Product.find({});
     res.render('admin',{products});
-})
+}));
 
 
-app.get('/product/:id/edit', async (req,res)=>{
+app.get('/product/:id/edit', wrapAsync(async (req,res,next)=>{
     const {id} = req.params;
     const product = await Product.findById(id);
-
+    if(!product){
+        throw new AppError('Product not found' ,404);
+    }
     res.render('edit',{product})
-})
+}));
 
-app.put('/product/:id',async(req,res)=>{
+app.put('/product/:id',wrapAsync(async(req,res,next)=>{
     const {id} = req.params;
     const updatedProduct = await Product.findByIdAndUpdate(id,req.body,{runValidators:true, new:true});
     res.redirect("/product/admin");
-})
-app.delete('/product/:id',async(req,res)=>{
+}))
+
+app.delete('/product/:id',wrapAsync(async(req,res,next)=>{
     const {id} = req.params;
     const deletedProduct = await Product.findByIdAndDelete(id);
     res.redirect('/product/admin')
-})
+}))
 
-app.patch('/product/:id/buy', async (req,res)=>{
+app.patch('/product/:id/buy', wrapAsync(async (req,res,next)=>{
     const {id} = req.params;
     const productBought = await Product.findById(id);
     let newQty = productBought.qty -1;
@@ -91,7 +102,12 @@ app.patch('/product/:id/buy', async (req,res)=>{
     //console.log(newProcut);
     res.redirect('/product');
 
-});
+}));
+
+app.use((err,req,res,next)=>{
+    const {status = 500,message = 'Something went wrong'} = err;
+    res.status(status).send(message);
+})
 
 app.listen(8080,()=>{
     console.log("Listen on port 8080");
